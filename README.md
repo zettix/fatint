@@ -2,7 +2,7 @@
 
 This is an integer library for very large integers.  The underlying datastructure is vector<unit32_t> with a boolean sign.
 The following operators are available:  
-* + - * / % << >> == != > < >= <=
+* &amp; + - * / % << >> == != > < >= <=
 And their assignment variations:  
 * += -= *= /= %= <<= >>=
 Also redirection via << and >> is supported.  
