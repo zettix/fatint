@@ -113,6 +113,7 @@ class Test {
 
     assert(  ((a * ZERO) == ZERO), "MUL  2");
     assert(  ((ZERO * b) == ZERO), "MUL  3");
+    assert(  ((a * b) == c), "MUL  4");
 
     return error;
   }
