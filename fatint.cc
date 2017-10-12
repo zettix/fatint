@@ -189,6 +189,11 @@ Fatint & Fatint::fastmultiply(const Fatint &rhs) {
 @see fastdivide() for more details.
 */
 Fatint & Fatint::fastmod(const Fatint &rhs) {
+  if (rhs == ZERO) {
+    cerr << "MOD BY ZERO ERROR!!!!!!!!!!!!!!!!!" << endl;
+    *this = ZERO;  // TODO(sean): what is a NaN and do I want one?
+    return *this;  // or do I throw an exception.  In c++??
+  }
   Fatint multiple = rhs;
   int bitcount = 0;
   while (multiple <= *this) {  // shift up to bignuts.
@@ -221,6 +226,14 @@ Storage of n^2 is no good.
 
 Fatint & Fatint::fastdivide(const Fatint &divisor) {
   Fatint result = ZERO;
+  if (divisor == ZERO) {
+    cerr << "DIVIDE BY ZERO ERROR!!!!!!!!!!!!!!!!!" << endl;
+    *this = ZERO;  // TODO(sean): what is a NaN and do I want one?
+    return *this;  // or do I throw an exception.  In c++??
+  }
+  if (divisor == ONE) {
+    return *this;
+  }
   Fatint multiple = divisor;
   int bitcount = 0;
   while (multiple <= *this) {  // shift up to bignuts.

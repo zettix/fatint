@@ -57,8 +57,8 @@ class Fatint {
   friend Fatint operator-(const Fatint &lhs, const Fatint &rhs);
   friend Fatint operator-(const Fatint &lhs);
   friend Fatint operator*(const Fatint &lhs, const Fatint &rhs);
-  friend Fatint operator/(const Fatint &lhs, const Fatint &rhs);
-  friend Fatint operator%(const Fatint &lhs, const Fatint &rhs);
+  friend Fatint operator/(const Fatint &lhs, const Fatint &rhs);  // Divide by ZERO returns ZERO!
+  friend Fatint operator%(const Fatint &lhs, const Fatint &rhs);  // Mod by ZERO returns ZERO!
   friend Fatint operator<<(const Fatint &lhs, int bits);
   friend Fatint operator>>(const Fatint &lhs, int bits);
 
