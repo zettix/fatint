@@ -200,6 +200,7 @@ Fatint & Fatint::fastmod(const Fatint &rhs) {
     multiple.shift(i);
     if (*this >= multiple) {
       *this -= multiple;
+    } else {
     }
   }
   return *this;
@@ -478,8 +479,10 @@ int Fatint::compare_to(const Fatint &rhs, bool abs) const {
       }
       if (d) {
         result = (this_p)? 1: -1;
+        break;
       } else {
         result = (this_p)? -1: 1;
+        break;
       }
     }
   }
@@ -496,33 +499,57 @@ Fatint & Fatint::shift(int bits) {
 
   int cell_shifts = bits / BIT_WIDTH;
   int cell_offset = bits % BIT_WIDTH;
-  uint32_t mask =  32 - cell_offset;
+  int mask =  32 - cell_offset;
   int new_size = 0;
 
   if (left) {
     for (int i = 0; i < cell_shifts; i++) {
       res.push_back(0);
+      new_size++;
     }
     uint32_t old_in = 0;
-    for (int i = 0; i < vec_.size(); i++) {
-      uint32_t new_in = vec_[i] << cell_offset;
-      new_in |= old_in;
-      res.push_back(new_in);
-      old_in = vec_[i] >> mask;
-      new_size++;
-    }
-    if (old_in > 0) {
-      res.push_back(old_in);
-      new_size++;
-    }
+      for (int i = 0; i < vec_.size(); i++) {
+        if (cell_offset != 0 ) {  // 32 does nada.
+          uint32_t new_in = vec_[i] << cell_offset;
+          new_in |= old_in;
+          res.push_back(new_in);
+          old_in = vec_[i] >> mask;
+        } else {
+           res.push_back(vec_[i]);
+        }
+        new_size++;
+      }
+      if (old_in > 0) {
+        res.push_back(old_in);
+        new_size++;
+      }
+/*
+before of shifting[129] :1ffffff with 1 buckets....
+We like shifting left! 129 times with 4 new buckets and 1 bit shifts fuck! 0 fuck! 1 fuck! 2 fuck! 3 cocksize!4 real cock size:4 mask:31 cocksize!old:0]!!!!!!!!!!5 real cock size:5 cocksize!!!!!!!!!!!!!!!!!!!!!!!!!!!5 real cock size:5Result of shifting[129] :3fffffe00000000000000000000000000000000
+see it has 5 buckets!
+Subtracting [129]... 3fffffe00000000000000000000000000000000 mbuckes:5  YES
+before of shifting[128] :1ffffff with 1 buckets....
+We like shifting left! 128 times with 4 new buckets and 0 bit shifts fuck! 0 fuck! 1 fuck! 2 fuck! 3 cocksize!4 real cock size:4 mask:32 cocksize!old:33554431]!!!!!!!!!!6 real cock size:6 cocksize!!!!!!!!!!!!!!!!!!!!!!!!!!!6 real cock size:6Result of shifting[128] :1ffffff01ffffff00000000000000000000000000000000
+see it has 6 buckets!
+Subtracting [128]... 1ffffff01ffffff00000000000000000000000000000000 mbuckes:6  
+*/
   } else {  // shift right
     // remove least significant cells.
     uint32_t old_in = 0;
     for (int i =  vec_.size() - 1; i >= cell_shifts; i--) {
-      uint32_t new_in = vec_[i] >> cell_offset;
+      uint32_t new_in;
+      if (cell_offset != 0) {
+        new_in = vec_[i] >> cell_offset;
+      } else {
+        new_in = vec_[i];
+      }
       new_in |= old_in;
       res.insert(res.begin(), new_in);
-      old_in = vec_[i] << mask;
+      if (cell_offset != 0) {
+        old_in = vec_[i] << mask;
+      } else {
+        old_in = vec_[i];
+      }
       new_size++;
     }
   }
@@ -540,6 +567,7 @@ Fatint & Fatint::shift(int bits) {
       vec_.push_back(res.back());
     }
   }
+
   return *this;
 }
 

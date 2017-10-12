@@ -215,6 +215,11 @@ class Test {
                "d9bf623b62ed06baae62067161c3dbd252ac5878cc5c4a717971dbee9a5d3"
                "f8a295759c45b3738517f5950d5f26421f23768771d");
     assert(  ((a % b) == c), "MOD  2");
+
+    a =Fatint("8f404561fd0662fe095443780783ba2cea33d5");
+    b =Fatint("1ffffff");
+    c =Fatint("b682ab");
+    assert(  ((a % b) == c), "MOD  3");
     
     return error;
   }
