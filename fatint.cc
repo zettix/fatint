@@ -19,11 +19,11 @@ using namespace std;
 
 namespace com_zettix {
 
-inline Fatint::Fatint()  {
+Fatint::Fatint()  {
   vec_.push_back(0);
 }
 
-inline Fatint::Fatint(const Fatint &rhs) {
+Fatint::Fatint(const Fatint &rhs) {
   vec_.clear();
   vec_.insert(vec_.begin(), rhs.vec_.begin(), rhs.vec_.end());
   positive = rhs.positive;
@@ -65,21 +65,21 @@ Fatint::Fatint(const string &rhs, int base) {
   }
 }
 
-inline Fatint & Fatint::operator=(const Fatint &rhs) {
+Fatint & Fatint::operator=(const Fatint &rhs) {
   vec_.clear();
   vec_.insert(vec_.begin(), rhs.vec_.begin(), rhs.vec_.end());
   positive = rhs.positive;
   return *this;
 }
 
-inline istream& operator>>(istream &din, Fatint &x) {
+istream& operator>>(istream &din, Fatint &x) {
   string s;
   din >> s;
   x = Fatint(s);
   return din;
 }
 
-inline ostream& operator<<(ostream &dout, const Fatint &x) {
+ostream& operator<<(ostream &dout, const Fatint &x) {
   dout << x.to_string();
   return dout;
 }
@@ -105,7 +105,7 @@ string Fatint::to_string() const {
   return ss.str();
 }
 
-inline bool Fatint::get_bit(int index) const {
+bool Fatint::get_bit(int index) const {
   int skip = index / BIT_WIDTH;
   int mask = 1 << (index % BIT_WIDTH);
   if ((skip + 1) > vec_.size()) {
@@ -118,7 +118,7 @@ inline bool Fatint::get_bit(int index) const {
   return false;
 }
 
-inline void Fatint::set_bit(int index) {
+void Fatint::set_bit(int index) {
   int skip = index / BIT_WIDTH;
   int mask = 1 << (index % BIT_WIDTH);
   if ((skip + 1) > vec_.size()) {
@@ -128,7 +128,7 @@ inline void Fatint::set_bit(int index) {
   vec_[skip] = item | mask;
 }
 
-inline void Fatint::clear_bit(int index) {
+void Fatint::clear_bit(int index) {
   int skip = index / BIT_WIDTH;
   int mask = 1 << (index % BIT_WIDTH);
   mask = ~mask;
@@ -366,87 +366,87 @@ Fatint & Fatint::operator-=(const Fatint &rhs) {
   return *this;
 }
 
-inline Fatint & Fatint::operator%=(const Fatint &rhs) {
+Fatint & Fatint::operator%=(const Fatint &rhs) {
   fastmod(rhs);
   return *this;
 }
 
-inline Fatint & Fatint::operator<<=(int bits) {
+Fatint & Fatint::operator<<=(int bits) {
   shift(bits);
 }
 
-inline Fatint & Fatint::operator>>=(int bits) {
+Fatint & Fatint::operator>>=(int bits) {
   shift(-bits);
 }
 
-inline Fatint & Fatint::operator/=(const Fatint &rhs) {
+Fatint & Fatint::operator/=(const Fatint &rhs) {
   fastdivide(rhs);
   return *this;
 }
 
-inline bool Fatint::is_positive() const {
+bool Fatint::is_positive() const {
   return positive;
 }
 
-inline bool Fatint::negate() {
+bool Fatint::negate() {
   positive = !positive;
   return positive;
 }
 
-inline Fatint & Fatint::operator*=(const Fatint &rhs) {
+Fatint & Fatint::operator*=(const Fatint &rhs) {
   fastmultiply(rhs);
   return *this;
 }
   
-inline Fatint operator+(const Fatint &lhs, const Fatint &rhs) {
+Fatint operator+(const Fatint &lhs, const Fatint &rhs) {
   Fatint tmp = lhs;
   tmp += rhs;
   return tmp;
 }
 
-inline Fatint operator+(const Fatint &lhs) {
+Fatint operator+(const Fatint &lhs) {
   Fatint tmp = lhs;
   return tmp;
 }
 
-inline Fatint operator-(const Fatint &lhs, const Fatint &rhs) {
+Fatint operator-(const Fatint &lhs, const Fatint &rhs) {
   Fatint tmp = lhs;
   tmp -= rhs;
   return tmp;
 }
 
-inline Fatint operator-(const Fatint &lhs) {
+Fatint operator-(const Fatint &lhs) {
   Fatint tmp = lhs;
   tmp.negate();
   return tmp;
 }
 
-inline Fatint operator*(const Fatint &lhs, const Fatint &rhs) {
+Fatint operator*(const Fatint &lhs, const Fatint &rhs) {
   Fatint tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
 
-inline Fatint operator/(const Fatint &lhs, const Fatint &rhs) {
+Fatint operator/(const Fatint &lhs, const Fatint &rhs) {
   Fatint tmp = lhs;
   tmp /= rhs;
   return tmp;
 }
 
-inline Fatint operator%(const Fatint &lhs, const Fatint &rhs) {
+Fatint operator%(const Fatint &lhs, const Fatint &rhs) {
   Fatint tmp = lhs;
   tmp %= rhs;
   return tmp;
 }
 
 
-inline Fatint operator>>(const Fatint &lhs, int bits) {
+Fatint operator>>(const Fatint &lhs, int bits) {
   Fatint tmp = lhs;
   tmp.shift(-bits);
   return tmp;
 }
 
-inline Fatint operator<<(const Fatint &lhs, int bits) {
+Fatint operator<<(const Fatint &lhs, int bits) {
   Fatint tmp = lhs;
   tmp.shift(bits);
   return tmp;
@@ -573,27 +573,27 @@ Fatint & Fatint::shift(int bits) {
   return *this;
 }
 
-inline bool operator<(const Fatint &lhs, const Fatint &rhs) {
+bool operator<(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) < 0);
 }
 
-inline bool operator>(const Fatint &lhs, const Fatint &rhs) {
+bool operator>(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) > 0);
 }
 
-inline bool operator<=(const Fatint &lhs, const Fatint &rhs) {
+bool operator<=(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) <= 0);
 }
 
-inline bool operator>=(const Fatint &lhs, const Fatint &rhs) {
+bool operator>=(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) >= 0);
 }
 
-inline bool operator==(const Fatint &lhs, const Fatint &rhs) {
+bool operator==(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) == 0);
 }
 
-inline bool operator!=(const Fatint &lhs, const Fatint &rhs) {
+bool operator!=(const Fatint &lhs, const Fatint &rhs) {
   return (lhs.compare_to(rhs) != 0);
 }
 
