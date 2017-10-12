@@ -522,16 +522,6 @@ Fatint & Fatint::shift(int bits) {
         res.push_back(old_in);
         new_size++;
       }
-/*
-before of shifting[129] :1ffffff with 1 buckets....
-We like shifting left! 129 times with 4 new buckets and 1 bit shifts fuck! 0 fuck! 1 fuck! 2 fuck! 3 cocksize!4 real cock size:4 mask:31 cocksize!old:0]!!!!!!!!!!5 real cock size:5 cocksize!!!!!!!!!!!!!!!!!!!!!!!!!!!5 real cock size:5Result of shifting[129] :3fffffe00000000000000000000000000000000
-see it has 5 buckets!
-Subtracting [129]... 3fffffe00000000000000000000000000000000 mbuckes:5  YES
-before of shifting[128] :1ffffff with 1 buckets....
-We like shifting left! 128 times with 4 new buckets and 0 bit shifts fuck! 0 fuck! 1 fuck! 2 fuck! 3 cocksize!4 real cock size:4 mask:32 cocksize!old:33554431]!!!!!!!!!!6 real cock size:6 cocksize!!!!!!!!!!!!!!!!!!!!!!!!!!!6 real cock size:6Result of shifting[128] :1ffffff01ffffff00000000000000000000000000000000
-see it has 6 buckets!
-Subtracting [128]... 1ffffff01ffffff00000000000000000000000000000000 mbuckes:6  
-*/
   } else {  // shift right
     // remove least significant cells.
     uint32_t old_in = 0;
