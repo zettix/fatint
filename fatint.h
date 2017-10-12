@@ -13,12 +13,11 @@
 #ifndef __FAT_INT_H__
 #define __FAT_INT_H__
 
-#include <vector>
+#include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
-
-#include <iostream>
 
 namespace com_zettix {
 
@@ -73,7 +72,6 @@ class Fatint {
 const Fatint ZERO = Fatint("0");
 const Fatint ONE = Fatint("1");
 const Fatint TWO = Fatint("2");
-
 
 istream& operator>>(istream &din, Fatint &x);
 ostream& operator<<(ostream &dout, const Fatint &x);

@@ -5,16 +5,15 @@
 // MIT Licence.
 
 #include <cstdint>
-#include <string>
 #include <iostream>
-#include <sstream>
 #include <iomanip>
-#include <iostream>
+#include <sstream>
+#include <string>
 #include <utility>
 
-using namespace std;
-
 #include "fatint.h"
+
+using namespace std;
 
 // stored as vector of unsigned 32 bit integers.  least significant is index 0.
 
