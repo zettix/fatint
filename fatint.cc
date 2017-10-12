@@ -200,11 +200,9 @@ Fatint & Fatint::fastmod(const Fatint &rhs) {
     bitcount++;
   }
   for (int i = bitcount - 1; i >= 0; i--) {
-    multiple = rhs;
-    multiple.shift(i);
+    multiple.shift(-1);
     if (*this >= multiple) {
       *this -= multiple;
-    } else {
     }
   }
   return *this;
@@ -240,8 +238,7 @@ Fatint & Fatint::fastdivide(const Fatint &divisor) {
     bitcount++;
   }
   for (int i = bitcount - 1; i >= 0; i--) {
-    multiple = divisor;
-    multiple.shift(i);
+    multiple.shift(-1);
     if (*this >= multiple) {
       *this -= multiple;
       result.set_bit(i);
