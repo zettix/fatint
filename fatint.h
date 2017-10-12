@@ -28,8 +28,6 @@ class Fatint {
   Fatint(const Fatint &rhs);
   Fatint(const string &rhs, int base=16);
 
-  // TODO(sean): inline where appropriate.
-  // bool operator==(const Fatint &rhs);
   Fatint & operator=(const Fatint &rhs);
   Fatint & operator+=(const Fatint &rhs);
   Fatint & operator-=(const Fatint &rhs);
