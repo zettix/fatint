@@ -111,6 +111,9 @@ class Test {
                "46cc4e31c300808aacf040c753b73c693f30cd44bf1a6b6844930058ed4bc"
                "53cc10");
 
+    assert(  ((a * ZERO) == ZERO), "MUL  2");
+    assert(  ((ZERO * b) == ZERO), "MUL  3");
+
     return error;
   }
 
@@ -193,6 +196,10 @@ class Test {
     c = Fatint("2000000000000000000000000000000");
     assert(  ((a / b) == c), "DIV  2");
     
+    assert(  ((a / ONE) == a), "DIV  3");
+
+    // rut-roh:
+    assert(  ((a / ZERO) == ZERO), "DIV  4");
     return error;
   }
 
@@ -220,6 +227,7 @@ class Test {
     b =Fatint("1ffffff");
     c =Fatint("b682ab");
     assert(  ((a % b) == c), "MOD  3");
+    assert(  ((a % ZERO) == ZERO), "MOD  4");  // ERROR, cannot mod 0.
     
     return error;
   }
