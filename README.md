@@ -11,7 +11,7 @@ And their assignment variations:
 
 Also redirection via << and >> is supported.  
 
-At the moment only hex strings are available for initialization.  
+Strings with bases 2 through 36 are available for initialization as well as long long ints.  
 The unit testing is adequite but not thorough.
 
 * Addition and subtraction are O(n) in time and space complexity when n is the data size, or number of digits.
