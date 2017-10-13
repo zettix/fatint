@@ -13,6 +13,7 @@ The following operators and utilities are available:
 * Redirection via << and >> is supported.  
 * Various bit access functions.
 
+# Constrution
 Strings with bases 2 through 36 are available for initialization as well as long
 long ints.
 
@@ -26,6 +27,7 @@ treated as 64 bit numbers via the long long int interfaces, but only as 63 bit
 * The code in /examples is for a Lehmer Random Number Generator and shows a simple example.
 * The fatint_test.cc code contains many examples.
 
+# Testing
 The unit testing is adequite but not thorough.
 
 # Time and Space Limits
