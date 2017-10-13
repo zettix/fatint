@@ -29,6 +29,44 @@ Fatint::Fatint(const Fatint &rhs) {
   positive = rhs.positive;
 }
 
+Fatint::Fatint(long long int value) {
+  if (value < 0) {
+    positive = false;
+    value = -value;
+  }
+  uint32_t x = (value & 0xffffffff);
+  vec_.push_back(x);
+  x = ((value & 0xffffffff00000000) >> 32);
+  vec_.push_back(x);
+}
+
+long long int Fatint::get_value() const {
+  long long int result = (long long int) vec_[0];
+  long long int multiplier =  (long long int) vec_[1] << 32;
+  multiplier &= 0x7fffffff00000000;  // 2's complement likes bit 63 for neg.
+  result += multiplier;
+  if (! positive) {
+    result = -result;
+  }
+  return result;
+}
+
+int Fatint::get_digit_(char c, int base) {
+  //static int digit_max = 'z' - 'a' + 10;
+  int value = -1;
+  if (c >= '0' && c <= '9') {
+    value = (c - '0');
+  } else if (c >= 'a' && c <= 'z') {
+    value = (c - 'a') + 10;
+  } else if (c >= 'A' && c <= 'z') {
+    value = (c - 'A') + 10;
+  }
+  if (value > base) {
+    return -1;
+  }
+  return value;
+}
+
 Fatint::Fatint(const string &rhs, int base) {
   int ctr = 0;
   uint32_t subt = 0;
@@ -37,31 +75,51 @@ Fatint::Fatint(const string &rhs, int base) {
     positive = false;
     start = 1;
   }
-  for (int j = rhs.length() - 1; j >= start; j--) {
-    char c = rhs[j];
-    int digval = 0;
-    if (c >= '0' && c <= '9') {
-      digval =  (c - '0');
-      ctr++;
+  if (base == 16) {
+    for (int j = rhs.length() - 1; j >= start; j--) {
+      char c = rhs[j];
+      int digval = get_digit_(c, base);
+      if (digval >= 0) {
+        ctr++;
+      } else {
+        cerr << "Illegal character in base 16: " << c << " returning ZERO";
+        vec_.push_back(0);
+        return;
+      }
+      subt += digval << ((ctr - 1) * 4);
+      if (ctr == 8) {
+        vec_.push_back(subt);
+        subt = 0;
+        ctr = 0;
+      }
     }
-    if (c >= 'a' && c <= 'f') {
-      digval =  (c - 'a') + 10;
-      ctr++;
-    }
-    if (c >= 'A' && c <= 'F') {
-      digval =  (c - 'A') + 10;
-      ctr++;
-    }
-    subt += digval << ((ctr - 1) * 4);
-    if (ctr == 8) {
+    if (subt != 0 || vec_.size() == 0) {
       vec_.push_back(subt);
-      subt = 0;
-      ctr = 0;
     }
-  }
-
-  if (subt != 0 || vec_.size() == 0) {
-    vec_.push_back(subt);
+  } else {
+   if (base > 1) {
+     Fatint accum;
+     Fatint base_f(base);
+     Fatint base_scaler(ONE);  // base ^ 0 = 1.
+     for (int j = rhs.length() - 1; j >= start; j--) {
+        char c = rhs[j];
+        int digval = get_digit_(c, base);
+        if (digval < 0) {
+          cerr << "Illegal character in base " << base << ": " 
+               << c << " returning ZERO";
+          vec_.push_back(0);
+          return;
+        }
+        accum += Fatint(digval) * base_scaler;
+        base_scaler *= base_f;
+      }
+      vec_.clear();
+      vec_.insert(vec_.begin(), accum.vec_.begin(), accum.vec_.end());
+      positive = accum.positive;
+    } else {
+      cerr << "Illegal base: " << base << endl;
+      vec_.push_back(0);
+    }
   }
 }
 
