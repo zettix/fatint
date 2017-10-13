@@ -6,6 +6,7 @@
 
 
 #include <string>
+#include <sstream>
 #include <iostream>
 #include "fatint.h"
 
@@ -44,7 +45,6 @@ class Test {
     a = ZERO - ZERO - ONE;
     assert( (a == b), "Minus ONE does equal Minus ONE. 18");
     assert( !(a != b), "Minus ONE does equal Minus ONE. 19");
-    return error;
 
     a = Fatint("4");
     b = Fatint("5");
@@ -255,6 +255,36 @@ class Test {
     return error;
   }
 
+  bool bit_tests() {
+    Fatint a("ffffffff0000000010000000");
+    //                       876543210
+    //                       digit is 4 bits.
+    assert(!(a.get_bit(27)), "BIT 1");
+    assert( (a.get_bit(28)), "BIT 2");
+    assert(!(a.get_bit(29)), "BIT 3");
+    a.set_bit(27);
+    assert( (a.get_bit(27)), "BIT 4");
+    assert( (a.get_bit(28)), "BIT 5");
+    assert(!(a.get_bit(29)), "BIT 6");
+    a.clear_bit(28);
+    assert( (a.get_bit(27)), "BIT 7");
+    assert(!(a.get_bit(28)), "BIT 8");
+    assert(!(a.get_bit(29)), "BIT 9");
+    return error;
+  }
+
+  bool stream_tests() {
+    string s = "deadbeef1234567890";
+    Fatint a(s);
+    stringstream ss;
+    ss << a;
+    string sb = ss.str();
+    assert( (s.compare(sb) == 0), "STREAM 1");
+    Fatint b;
+    ss >> b;
+    assert( (a == b), "STREAM 2");
+    return error;
+  }
 
   int run() {
     equality_tests();
@@ -264,6 +294,8 @@ class Test {
     divide_tests();
     mod_tests();
     shift_tests();
+    bit_tests();
+    stream_tests();
     if (error) {
       cout << "Failures! " << serror << endl;
     } else {
