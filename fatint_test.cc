@@ -320,10 +320,10 @@ class Test {
    Fatint f16(b16, 16);
    Fatint f10(b10, 10);
    Fatint f8(b8, 8);
-   assert( (f16 == f8), "BASE 3");
    assert( (f16 == f10), "BASE 2");
    assert( (f16 == f8), "BASE 3");
-
+   Fatint fq("Gobblydygook", 4);
+   assert( (fq == ZERO), "BASE 4");
    return error;
   }
     

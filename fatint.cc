@@ -52,7 +52,6 @@ long long int Fatint::get_value() const {
 }
 
 int Fatint::get_digit_(char c, int base) {
-  //static int digit_max = 'z' - 'a' + 10;
   int value = -1;
   if (c >= '0' && c <= '9') {
     value = (c - '0');
@@ -82,7 +81,8 @@ Fatint::Fatint(const string &rhs, int base) {
       if (digval >= 0) {
         ctr++;
       } else {
-        cerr << "Illegal character in base 16: " << c << " returning ZERO";
+        cerr << "Illegal character in base 16: " << c << " returning ZERO"
+             << endl;
         vec_.push_back(0);
         return;
       }
@@ -106,7 +106,7 @@ Fatint::Fatint(const string &rhs, int base) {
         int digval = get_digit_(c, base);
         if (digval < 0) {
           cerr << "Illegal character in base " << base << ": " 
-               << c << " returning ZERO";
+               << c << " returning ZERO" << endl;
           vec_.push_back(0);
           return;
         }
