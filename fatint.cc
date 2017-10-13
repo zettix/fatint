@@ -38,6 +38,7 @@ Fatint::Fatint(long long int value) {
   vec_.push_back(x);
   x = ((value & 0xffffffff00000000) >> 32);
   vec_.push_back(x);
+  remove_leading_zeros_();
 }
 
 long long int Fatint::get_value() const {
@@ -143,22 +144,26 @@ ostream& operator<<(ostream &dout, const Fatint &x) {
 }
 
 
-string Fatint::to_string() const {
+string Fatint::to_string(int base) const {
   stringstream ss;
-
   if (!positive) {
     ss << "-";
   }
-  for (int j = vec_.size() - 1; j >= 0; j--) {
-    uint32_t num = vec_[j];
-    stringstream tmp_ss;
-    tmp_ss << hex << num;
-    if (j != vec_.size() - 1) {
-      for (int i = 8 - tmp_ss.str().length(); i > 0; i--) {
-        ss << "0";
+  if (base != 16) {
+    string special_return = special_to_string_(base);
+    ss << special_return;
+  } else {
+    for (int j = vec_.size() - 1; j >= 0; j--) {
+      uint32_t num = vec_[j];
+      stringstream tmp_ss;
+      tmp_ss << hex << num;
+      if (j != vec_.size() - 1) {
+        for (int i = 8 - tmp_ss.str().length(); i > 0; i--) {
+          ss << "0";
+        }
       }
+      ss << tmp_ss.str();
     }
-    ss << tmp_ss.str();
   }
   return ss.str();
 }
@@ -195,6 +200,7 @@ void Fatint::clear_bit(int index) {
   }
   uint32_t item = vec_[skip];
   vec_[skip] = item & mask;
+  remove_leading_zeros_();
 }
 
 
@@ -206,7 +212,7 @@ into its binary form, and then performing the add on the digits. For example,
 9 x 5 = 9 x (100) + 9 x (000) + 9 x (001)
 by masking 5 one bit at a time, resulting in 3 adds instead of 5.
 This is log2(n) or linear in the number of digits.  */
-Fatint & Fatint::fastmultiply(const Fatint &rhs) {
+Fatint & Fatint::fastmultiply_(const Fatint &rhs) {
   bool me_bigger = compare_to(rhs, true) > 0;
   const Fatint &aref = (me_bigger)? *this : rhs;
   const Fatint &bref = (me_bigger)? rhs : *this;
@@ -245,7 +251,7 @@ Fatint & Fatint::fastmultiply(const Fatint &rhs) {
 
 @see fastdivide() for more details.
 */
-Fatint & Fatint::fastmod(const Fatint &rhs) {
+Fatint & Fatint::fastmod_(const Fatint &rhs) {
   if (rhs == ZERO) {
     cerr << "MOD BY ZERO ERROR!!!!!!!!!!!!!!!!!" << endl;
     *this = ZERO;  // TODO(sean): what is a NaN and do I want one?
@@ -279,7 +285,7 @@ Storage of n^2 is no good.
 */
 
 
-Fatint & Fatint::fastdivide(const Fatint &divisor) {
+Fatint & Fatint::fastdivide_(const Fatint &divisor) {
   Fatint result = ZERO;
   if (divisor == ZERO) {
     cerr << "DIVIDE BY ZERO ERROR!!!!!!!!!!!!!!!!!" << endl;
@@ -305,6 +311,53 @@ Fatint & Fatint::fastdivide(const Fatint &divisor) {
   *this = result;
   return *this;
 }
+
+string Fatint::special_to_string_(int base) const {
+  static char base_buff[37] = "0123456789"
+                              "abcdefghij"
+                              "klmnopqrst"
+                              "uvwxyz";
+
+  if (base > 36 || base < 2) {
+      return "[ERROR: Invalid base]";
+  }
+  
+  Fatint tmp = *this;
+  Fatint basecount = ONE;
+  Fatint fatbase(base);
+  stringstream ss;
+  
+  // Size up number of digits of base whatever.
+  int mulcount = 0;
+  while (tmp > basecount) {
+    basecount *= fatbase;
+    mulcount++;
+  }
+  int mulcount_max = mulcount;
+
+  basecount /= fatbase;
+  // Divide with remainder to get digits.
+  while (tmp >= ZERO && basecount >= ONE) {
+    Fatint doggo = tmp / basecount;
+    if (doggo < fatbase) {
+      int i = doggo.get_value();
+      char c = base_buff[i];
+      ss << c;
+    } else {
+      return "[ERROR: BAD SPECIAL CONVERSION";
+    }
+    tmp -= doggo * basecount;  // the remainder.
+    basecount /= fatbase;
+    mulcount--;
+    if (tmp < ZERO) {
+      ss << "Tmp: " << tmp << endl;
+      ss << "[ERROR: CODE SPECIAL CONVERSION";
+      return ss.str();
+    }
+  }
+  return ss.str();
+}
+
 
 Fatint & Fatint::operator+=(const Fatint &rhs) {
   if (positive != rhs.positive) {
@@ -355,6 +408,26 @@ Fatint & Fatint::operator+=(const Fatint &rhs) {
   return *this;
 }
 
+void Fatint::remove_leading_zeros_() {
+  // remove leading zeros. but leave at least 1 digit.
+  int newsize = vec_.size();
+  for (int j = vec_.size() - 1; j > 0; j--) { 
+    if (vec_[j] == 0) {
+      newsize--;
+    } else {
+      break;
+    }
+  }
+  if (newsize != vec_.size()) {
+   vec_.resize(newsize);
+  }
+  if (newsize == 1) {
+    if (vec_.back() == 0) {
+      positive = true;
+    }
+  }
+}
+
 Fatint & Fatint::operator-=(const Fatint &rhs) {
   if (positive != rhs.positive) {
     // -a - b, a - -b: just add.
@@ -401,28 +474,12 @@ Fatint & Fatint::operator-=(const Fatint &rhs) {
       vec_.push_back(res);
     }
   }
-  // remove trailing zeros. but leave at least 1 digit.
-  int newsize = vec_.size();
-  for (int j = vec_.size() - 1; j > 0; j--) { 
-    if (vec_[j] == 0) {
-      newsize--;
-    } else {
-      break;
-    }
-  }
-  if (newsize != vec_.size()) {
-   vec_.resize(newsize);
-  }
-  if (newsize == 1) {
-    if (vec_.back() == 0) {
-      positive = true;
-    }
-  }
+  remove_leading_zeros_();
   return *this;
 }
 
 Fatint & Fatint::operator%=(const Fatint &rhs) {
-  fastmod(rhs);
+  fastmod_(rhs);
   return *this;
 }
 
@@ -435,7 +492,7 @@ Fatint & Fatint::operator>>=(int bits) {
 }
 
 Fatint & Fatint::operator/=(const Fatint &rhs) {
-  fastdivide(rhs);
+  fastdivide_(rhs);
   return *this;
 }
 
@@ -449,7 +506,7 @@ bool Fatint::negate() {
 }
 
 Fatint & Fatint::operator*=(const Fatint &rhs) {
-  fastmultiply(rhs);
+  fastmultiply_(rhs);
   return *this;
 }
   

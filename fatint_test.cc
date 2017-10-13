@@ -201,6 +201,11 @@ class Test {
 
     // rut-roh:
     assert(  ((a / ZERO) == ZERO), "DIV  4");
+
+    a = Fatint("3b9aca00");
+    b = Fatint("a");
+    assert (( a / b) > ZERO, "DIV 5");
+
     return error;
   }
 
@@ -324,6 +329,10 @@ class Test {
    assert( (f16 == f8), "BASE 3");
    Fatint fq("Gobblydygook", 4);
    assert( (fq == ZERO), "BASE 4");
+
+   string s8 = f8.to_string(10);
+   assert( (s8.compare(b10) == 0), "Base 5");
+
    return error;
   }
     

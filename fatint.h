@@ -3,15 +3,15 @@
 // Inspired by Java's BigInteger class and C++'s fascination with overloading.
 // (C) 2017 Sean Brennan
 //
-// Note: c++11 required due to the use of uint32_t anbd uint64_t.
-//       replacing with longs should not be difficult but you need
+// Note: c++11 required due to the use of uint32_t and uint64_t.
+//       Replacing with longs should not be difficult but you need
 //       a native double width of a single bit packet, 64 for 32 in this case.
 //
 // MIT Licence.  I hear it's a good one.
 //
 
-#ifndef __FAT_INT_H__
-#define __FAT_INT_H__
+#ifndef __COM_ZETTIX_FATINT_H__
+#define __COM_ZETTIX_FATINT_H__
 
 #include <iostream>
 #include <string>
@@ -44,7 +44,7 @@ class Fatint {
   long long int get_value() const;  // get value masked with |long long|
   void set_bit(int index);
   void clear_bit(int index);
-  string to_string() const;
+  string to_string(int base=16) const;
   friend bool operator<(const Fatint &lhs, const Fatint &rhs);
   friend bool operator>(const Fatint &lhs, const Fatint &rhs);
   friend bool operator<=(const Fatint &lhs, const Fatint &rhs);
@@ -61,15 +61,16 @@ class Fatint {
   friend Fatint operator<<(const Fatint &lhs, int bits);
   friend Fatint operator>>(const Fatint &lhs, int bits);
 
-  Fatint &fastmultiply(const Fatint &rhs);
-  Fatint &fastdivide(const Fatint &rhs);
-  Fatint &fastmod(const Fatint &rhs);
-
  private:
   vector<uint32_t> vec_;
   bool positive = true;
   static const int BIT_WIDTH = 32;
   static int get_digit_(char c, int base);
+  Fatint &fastmultiply_(const Fatint &rhs);
+  Fatint &fastdivide_(const Fatint &rhs);
+  Fatint &fastmod_(const Fatint &rhs);
+  string special_to_string_(int base) const;
+  void remove_leading_zeros_();
 };
 
 const Fatint ZERO = Fatint("0");
