@@ -26,6 +26,7 @@ class Fatint {
   Fatint();
   Fatint(const Fatint &rhs);
   Fatint(const string &rhs, int base=16);
+  Fatint(const long long int value);
 
   Fatint & operator=(const Fatint &rhs);
   Fatint & operator+=(const Fatint &rhs);
@@ -40,6 +41,7 @@ class Fatint {
   bool is_positive() const;
   bool negate();
   bool get_bit(int index) const;
+  long long int get_value() const;  // get value masked with |long long|
   void set_bit(int index);
   void clear_bit(int index);
   string to_string() const;
@@ -67,6 +69,7 @@ class Fatint {
   vector<uint32_t> vec_;
   bool positive = true;
   static const int BIT_WIDTH = 32;
+  static int get_digit_(char c, int base);
 };
 
 const Fatint ZERO = Fatint("0");

@@ -286,6 +286,48 @@ class Test {
     return error;
   }
 
+  bool long_long_tests() {
+    long long int a = 9223372036854775807;
+    Fatint fa(a);
+    fa = -fa;
+    a = -a;
+    assert( (a == fa.get_value()), "LONG 1");
+
+    return error;
+
+  }
+
+  bool anybase_tests() {
+   Fatint a = Fatint("", 10);
+   assert( (a == ZERO), "BASE 1");
+   string b16 = "892d26e28b03c4515d10e33f67f45d54bded9703303fd041962e222e1220"
+                "e246f2bebe56fbbccc9d7a252a58ddeef0c2db01a7faf80388f157987fb5"
+                "b9b37ec476c5da0d755cc40ce2c387b7a4a558b0f198b894e2f2e3b7dd34"
+                "ba7f1452aeb388b66e70a2feb2a1abe4c843e46ed0ee3aedd2be181d16e4"
+                "78ae087af28288d0";
+   string b10 = "963285261173254362271184454887346023369363895699519167340082"
+                "226490223402462615650184503029260492003908377099894751427310"
+                "322643302198588690069095107378187188328824724138482659042912"
+                "276564676583893089610346773577752812012692759357160246264563"
+                "445096932547863573416662901577818304719739797282159881442426"
+                "75583184";
+   string b8 = "1044551156121300742121272103431766376427252275733134031403772"
+                "020313056104270221016110674537276255756746311657211225130673"
+                "673606055540151775370007043612571417755334663375421666135501"
+                "535256304031613034173364451254260743142704516136270733735151"
+                "351770505125654704266334702427753124152762310207621566416707"
+                "27335127606016426710742560207536240504320";
+   Fatint f16(b16, 16);
+   Fatint f10(b10, 10);
+   Fatint f8(b8, 8);
+   assert( (f16 == f10), "BASE 2");
+   assert( (f16 == f8), "BASE 3");
+   Fatint fq("Gobblydygook", 4);
+   assert( (fq == ZERO), "BASE 4");
+   return error;
+  }
+    
+
   int run() {
     equality_tests();
     multiply_tests();
@@ -296,6 +338,8 @@ class Test {
     shift_tests();
     bit_tests();
     stream_tests();
+    long_long_tests();
+    anybase_tests();
     if (error) {
       cout << "Failures! " << serror << endl;
     } else {
