@@ -335,6 +335,29 @@ class Test {
 
    return error;
   }
+
+
+  bool logic_tests() {
+    Fatint a("f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f");
+    Fatint b("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0");
+    Fatint o("fffffffffffffffffffffffffffffffffff");
+    Fatint z("00000000000000000000000000000000000");
+    
+    Fatint d("fffff0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0");
+
+    assert( ((a | b) == o), "LOGIC 1");
+
+    Fatint c = a & b;
+    assert( ((a & b) == z), "LOGIC 2");
+
+    c = a ^ b;
+    assert( ((a ^ b) == o), "LOGIC 3");
+
+    c = ~a;
+    b = ~c;
+    assert( (a == b), "LOGIC 5");
+    return error;
+  }
     
 
   int run() {
@@ -349,6 +372,7 @@ class Test {
     stream_tests();
     long_long_tests();
     anybase_tests();
+    logic_tests();
     if (error) {
       cout << "Failures! " << serror << endl;
     } else {

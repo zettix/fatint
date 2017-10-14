@@ -122,6 +122,7 @@ Fatint::Fatint(const string &rhs, int base) {
       vec_.push_back(0);
     }
   }
+  remove_leading_zeros_();
 }
 
 Fatint & Fatint::operator=(const Fatint &rhs) {
@@ -478,6 +479,53 @@ Fatint & Fatint::operator-=(const Fatint &rhs) {
   return *this;
 }
 
+Fatint & Fatint::operator&=(const Fatint &rhs) {
+  int a_end = vec_.size();
+  int b_end = rhs.vec_.size();
+  int i = 0;
+  for (; i < a_end; i++) {
+    if (i >= b_end) {
+      break;
+    }
+    vec_[i] &= rhs.vec_[i];
+  }
+  if (i < a_end) {  // zero out all cells > |rhs cells|
+    vec_.resize(i);
+  }
+  remove_leading_zeros_();
+}
+
+Fatint & Fatint::operator|=(const Fatint &rhs) {
+  int a_end = vec_.size();
+  int b_end = rhs.vec_.size();
+  for (int i = 0; i < a_end || i < b_end; i++) {
+    uint32_t bval = 0;
+    if (i < b_end) {
+      bval = rhs.vec_[i];
+    }
+    if (i < a_end) {
+      vec_[i] |= bval;
+    } else {
+      vec_.push_back(bval);
+    }
+  }
+}
+
+// Leading zeros complicate this.  & and | escape it.  ~ will be a problem.
+//   However the invariant X xor Y xor Y = X must hold.
+Fatint & Fatint::operator^=(const Fatint &rhs) {
+  int a_end = vec_.size();
+  int b_end = rhs.vec_.size();
+  for (int i = 0; i < a_end; i++) {
+    uint32_t val = 0;
+    if (i < b_end) {
+      val = rhs.vec_[i];
+    }
+    vec_[i] ^= val;
+  }
+  remove_leading_zeros_();
+}
+
 Fatint & Fatint::operator%=(const Fatint &rhs) {
   fastmod_(rhs);
   return *this;
@@ -551,6 +599,34 @@ Fatint operator%(const Fatint &lhs, const Fatint &rhs) {
   return tmp;
 }
 
+Fatint operator&(const Fatint &lhs, const Fatint &rhs) {
+  Fatint tmp = lhs;
+  tmp &= rhs;
+  return tmp;
+}
+
+Fatint operator|(const Fatint &lhs, const Fatint &rhs) {
+  Fatint tmp = lhs;
+  tmp |= rhs;
+  return tmp;
+}
+
+Fatint operator^(const Fatint &lhs, const Fatint &rhs) {
+  Fatint tmp = lhs;
+  tmp ^= rhs;
+  return tmp;
+}
+
+// X = ~ ~X  but |X| changes by 32 bit chunks.
+Fatint operator~(const Fatint &rhs) {
+  Fatint tmp = rhs;
+  int a_end = tmp.vec_.size();
+  for (int i = 0; i < a_end; i++) {
+    tmp.vec_[i] = ~tmp.vec_[i];
+  }
+  tmp.remove_leading_zeros_();
+  return tmp;
+}
 
 Fatint operator>>(const Fatint &lhs, int bits) {
   Fatint tmp = lhs;
@@ -563,7 +639,6 @@ Fatint operator<<(const Fatint &lhs, int bits) {
   tmp.shift(bits);
   return tmp;
 }
-
 
 int Fatint::compare_to(const Fatint &rhs, bool abs) const {
   // <, ==, > ? -int, 0, +int.

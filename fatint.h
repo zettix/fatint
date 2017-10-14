@@ -34,6 +34,9 @@ class Fatint {
   Fatint & operator*=(const Fatint &rhs);
   Fatint & operator/=(const Fatint &rhs);
   Fatint & operator%=(const Fatint &rhs);
+  Fatint & operator&=(const Fatint &rhs);
+  Fatint & operator|=(const Fatint &rhs);
+  Fatint & operator^=(const Fatint &rhs);
   Fatint & operator<<=(int bits);
   Fatint & operator>>=(int bits);
   Fatint & shift(int bits);
@@ -58,6 +61,10 @@ class Fatint {
   friend Fatint operator*(const Fatint &lhs, const Fatint &rhs);
   friend Fatint operator/(const Fatint &lhs, const Fatint &rhs);  // Divide by ZERO returns ZERO!
   friend Fatint operator%(const Fatint &lhs, const Fatint &rhs);  // Mod by ZERO returns ZERO!
+  friend Fatint operator&(const Fatint &lhs, const Fatint &rhs);
+  friend Fatint operator|(const Fatint &lhs, const Fatint &rhs);
+  friend Fatint operator^(const Fatint &lhs, const Fatint &rhs);
+  friend Fatint operator~(const Fatint &lhs);
   friend Fatint operator<<(const Fatint &lhs, int bits);
   friend Fatint operator>>(const Fatint &lhs, int bits);
 
@@ -90,6 +97,10 @@ Fatint operator-(const Fatint &lhs, const Fatint &rhs);
 Fatint operator*(const Fatint &lhs, const Fatint &rhs);
 Fatint operator/(const Fatint &lhs, const Fatint &rhs);
 Fatint operator%(const Fatint &lhs, const Fatint &rhs);
+Fatint operator&(const Fatint &lhs, const Fatint &rhs);
+Fatint operator|(const Fatint &lhs, const Fatint &rhs);
+Fatint operator^(const Fatint &lhs, const Fatint &rhs);
+Fatint operator~(const Fatint &lhs);
 Fatint operator<<(const Fatint &lhs, int bits);
 Fatint operator>>(const Fatint &lhs, int bits);
 
