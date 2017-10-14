@@ -1,5 +1,5 @@
 # Fatint
-## A C++ library for arbitrary precision integers.
+## A C++ library for arbitrary precision integers
 
 ## Sean Brennan, 2017
 
@@ -13,7 +13,7 @@ The following operators and utilities are available:
 * Redirection via << and >> is supported.  
 * Various bit access functions.
 
-## Constrution
+## Construction
 Strings with bases 2 through 36 are available for initialization as well as long
 long ints.
 
