@@ -8,8 +8,8 @@ The underlying datastructure is vector<unit32_t> with a boolean sign, while
 BigInteger uses 2's complement.
 
 The following operators and utilities are available:  
-* +, -, *, /, %, <<, >>, ==, !=, >, <, >=, <=
-* +=, -=, *=, /=, %=, <<=, >>=
+* +, -, *, /, %, &, |, ^, ~, <<, >>, ==, !=, >, <, >=, <=
+* +=, -=, *=, /=, %=, &=, |=, ^=, <<=, >>=
 * Redirection via << and >> is supported.  
 * Various bit access functions.
 
