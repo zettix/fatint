@@ -3,5 +3,4 @@
 ALL: lehmer_rng
 
 lehmer_rng: lehmer_rng.cc
-	g++ -g -std=c++11 lehmer_rng.cc fatint.o -o lehmer_rng
-  
+	g++ -g -std=c++11 -I.. lehmer_rng.cc -L ../static -l fatint -o lehmer_rng

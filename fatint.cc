@@ -493,6 +493,7 @@ Fatint & Fatint::operator&=(const Fatint &rhs) {
     vec_.resize(i);
   }
   remove_leading_zeros_();
+  return *this;
 }
 
 Fatint & Fatint::operator|=(const Fatint &rhs) {
@@ -509,6 +510,7 @@ Fatint & Fatint::operator|=(const Fatint &rhs) {
       vec_.push_back(bval);
     }
   }
+  return *this;
 }
 
 // Leading zeros complicate this.  & and | escape it.  ~ will be a problem.
@@ -524,6 +526,7 @@ Fatint & Fatint::operator^=(const Fatint &rhs) {
     vec_[i] ^= val;
   }
   remove_leading_zeros_();
+  return *this;
 }
 
 Fatint & Fatint::operator%=(const Fatint &rhs) {
@@ -533,10 +536,12 @@ Fatint & Fatint::operator%=(const Fatint &rhs) {
 
 Fatint & Fatint::operator<<=(int bits) {
   shift(bits);
+  return *this;
 }
 
 Fatint & Fatint::operator>>=(int bits) {
   shift(-bits);
+  return *this;
 }
 
 Fatint & Fatint::operator/=(const Fatint &rhs) {
