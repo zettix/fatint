@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
       "based on https://en.wikipedia.org/wiki/Lehmer_random_number_generator"
        << std::endl;
   for (int i = 0; i < 100; i++) {
+     if (i < 10) std::cout << " ";
      std::cout << i << " " << l.next() << std::endl;
   }
 }
